@@ -44,7 +44,7 @@ public class OracleService
         catch (OracleException ex)
         {
             Console.Error.WriteLine($"✗ Oracle Database Error: {ex.Message}");
-            Console.Error.WriteLine($"   Error Code: {ex.Code}");
+            Console.Error.WriteLine($"   Error Code: {ex.Number}");
             throw;
         }
         catch (Exception ex)
@@ -240,6 +240,28 @@ public class OracleService
         {
             Console.Error.WriteLine($"✗ Connection validation failed: {ex.Message}");
             return false;
+        }
+    }
+
+    /// <summary>
+    /// Gets the current Oracle schema/user name
+    /// </summary>
+    public async Task<string?> GetCurrentSchemaAsync()
+    {
+        try
+        {
+            using var connection = new OracleConnection(_connectionString);
+            await connection.OpenAsync();
+            
+            using var command = new OracleCommand("SELECT SYS_CONTEXT('USERENV', 'CURRENT_SCHEMA') FROM DUAL", connection);
+            var result = await command.ExecuteScalarAsync();
+            
+            return result?.ToString();
+        }
+        catch (Exception ex)
+        {
+            Console.Error.WriteLine($"✗ Failed to get schema name: {ex.Message}");
+            return null;
         }
     }
 }

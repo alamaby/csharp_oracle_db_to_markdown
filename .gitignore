@@ -29,8 +29,8 @@ bld/
 # Environment variables - NEVER commit credentials!
 .env
 
-# Generated output
-DATA_DICTIONARY.md
+# Generated output (with schema and timestamp pattern)
+DATA_DICTIONARY_*.md
 
 # NuGet Packages
 *.nupkg

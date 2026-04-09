@@ -50,6 +50,19 @@ class Program
             }
             Console.WriteLine();
 
+            // Get schema name for output file
+            var schemaName = config.SchemaName;
+            if (string.IsNullOrEmpty(schemaName))
+            {
+                schemaName = await oracleService.GetCurrentSchemaAsync();
+            }
+            if (string.IsNullOrEmpty(schemaName))
+            {
+                schemaName = config.UserId; // Fallback to user ID
+            }
+            Console.WriteLine($"   Current schema: {schemaName}");
+            Console.WriteLine();
+
             // Step 4: Fetch schema and generate documentation
             Console.WriteLine("[4/4] Fetching schema and generating documentation...");
             var tables = await oracleService.FetchAllTableSchemasAsync();
@@ -61,8 +74,12 @@ class Program
                 return 0;
             }
 
-            var markdown = markdownService.GenerateMarkdown(tables, OUTPUT_FILE);
-            await markdownService.WriteToFileAsync(markdown, OUTPUT_FILE);
+            // Generate output filename with schema and timestamp
+            var timestamp = DateTime.Now.ToString("yyyyMMdd_HHmm");
+            var outputFileName = $"DATA_DICTIONARY_{schemaName}_{timestamp}.md";
+            
+            var markdown = markdownService.GenerateMarkdown(tables, outputFileName);
+            await markdownService.WriteToFileAsync(markdown, outputFileName);
 
             Console.WriteLine();
             Console.WriteLine("╔══════════════════════════════════════════════════════════╗");
@@ -115,6 +132,7 @@ class Program
         config.ServiceName = Env.GetString("ORACLE_SERVICE_NAME", "");
         config.UserId = Env.GetString("ORACLE_USER_ID", "");
         config.Password = Env.GetString("ORACLE_PASSWORD", "");
+        config.SchemaName = Env.GetString("ORACLE_SCHEMA", "");
 
         // Validate configuration
         if (!config.Validate(out var errors))

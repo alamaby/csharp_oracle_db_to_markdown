@@ -1,8 +1,8 @@
 # Oracle-to-Markdown Data Dictionary Generator
 
-A powerful CLI tool that automatically generates comprehensive data dictionary documentation from Oracle 19c databases. Built with .NET 8 and C#, this tool bridges the gap between database schemas and developer-friendly documentation.
+A powerful CLI tool that automatically generates comprehensive data dictionary documentation from Oracle 19c databases. Built with .NET 10 and C#, this tool bridges the gap between database schemas and developer-friendly documentation.
 
-![.NET Version](https://img.shields.io/badge/.NET-8.0-blue)
+![.NET Version](https://img.shields.io/badge/.NET-10.0-blue)
 ![License](https://img.shields.io/badge/license-MIT-green)
 ![Oracle](https://img.shields.io/badge/Oracle-19c-red)
 
@@ -53,7 +53,7 @@ In the **Software Development Life Cycle (SDLC)**, maintaining accurate and up-t
 
 ### Prerequisites
 
-- [.NET 8 SDK](https://dotnet.microsoft.com/download/dotnet/8.0) or later
+- [.NET 10 SDK](https://dotnet.microsoft.com/download/dotnet/10.0) or later
 - Access to an Oracle 19c database
 - Oracle client libraries (included via `Oracle.ManagedDataAccess.Core`)
 
@@ -133,15 +133,20 @@ The tool will:
 2. ✅ Connect to Oracle database
 3. ✅ Discover all user tables
 4. ✅ Extract schema metadata (columns, types, constraints, comments)
-5. ✅ Generate `DATA_DICTIONARY.md` with:
+5. ✅ Generate `DATA_DICTIONARY_{SCHEMA}_{YYYYMMDD_HHMM}.md` with:
    - Summary statistics
    - Mermaid.js Entity Relationship Diagram
    - Detailed table documentation with column specifications
    - Quick reference index
 
+**Output File Naming:**
+- Files are named with schema and timestamp to prevent overwriting: `DATA_DICTIONARY_{SCHEMA}_{YYYYMMDD_HHMM}.md`
+- Example: `DATA_DICTIONARY_HR_20260408_1430.md`
+- If `ORACLE_SCHEMA` is not set in `.env`, the tool will auto-detect from database or fallback to `ORACLE_USER_ID`
+
 ### Output Example
 
-After successful execution, you'll find `DATA_DICTIONARY.md` in the project root:
+After successful execution, you'll find a file like `DATA_DICTIONARY_HR_20260408_1430.md` in the project root:
 
 ```markdown
 # Data Dictionary
@@ -311,7 +316,7 @@ Built with ❤️ for System Analysts and developers who value good documentatio
 
 ## 📊 Sample Output
 
-See [DATA_DICTIONARY.md](DATA_DICTIONARY.md) (generated after running against your database) for a complete example of the generated documentation.
+See any generated `DATA_DICTIONARY_*.md` file (generated after running against your database) for a complete example of the generated documentation.
 
 ---
 

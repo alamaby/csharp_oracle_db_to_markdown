@@ -10,6 +10,7 @@ public class DatabaseConfig
     public string ServiceName { get; set; } = string.Empty;
     public string UserId { get; set; } = string.Empty;
     public string Password { get; set; } = string.Empty;
+    public string SchemaName { get; set; } = string.Empty;
 
     /// <summary>
     /// Builds the Oracle connection string from configuration
